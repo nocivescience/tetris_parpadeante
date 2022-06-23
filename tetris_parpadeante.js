@@ -112,16 +112,48 @@ class MyTetris{
             }
         }
     }
+    collision(x,y){
+        for (let i=0;i<this.shape.length;i++){
+            for(let j=0;this.shape.length;j++){
+                if(this.shape[i][j]>0){
+                    if((x+i)>0&&(x+i)<cols&&(y+j)<rows){
+                        if(this.grid[q][p]>0){
+                            return true
+                        }
+                    }else{
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
     moveDown(){
-        setInterval(()=>{
-            this.y+=.01;
-        },1000)
+        if(this.fallingPiece===null){
+            this.renderGameState()
+            return
+        }else if(this.collision(this.x,this.y+1)){
+            this.renderPiece.map((row,i)=>{
+                row.map((cell,j)=>{
+                    if((x+j)>=0&&(x+j)<cols&&(y+i)<rows&&cell>0){
+                        this.grid[y+i][x+j]=shape[i][j]
+                    }
+                })
+            });
+            if(this.y===0){
+                alert('game is over');
+                this.grid=this.makeStarting()
+            }
+        }else{
+            this.y+=1
+        }
+        this.renderGameState()
     }
 }
 function ready(){
     const games=new MyTetris(shapes[0],ctx);
-    games.renderGameState();
-    games.renderPiece();
-    games.moveDown();
+    setInterval(()=>{
+        games.moveDown();
+    },1000)
 }
 ready();
