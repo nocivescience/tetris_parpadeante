@@ -115,12 +115,14 @@ class MyTetris{
     collision(x,y){
         for(let i=0;i<this.shape.length;i++){
             for(let j=0;j<this.shape.length;j++){
-                if(x+j>0&&x+j<cols&&y+i<rows){
-                    if(this.grid[y+i][x+j]>0){
+                if(this.shape[i][j]>0){
+                    if(x+j>0&&x+j<cols&&y+i<rows){
+                        if(this.grid[y+i][x+j]>0){
+                            return true;
+                        }
+                    }else{
                         return true;
                     }
-                }else{
-                    return true;
                 }
             }
         }
@@ -137,14 +139,15 @@ class MyTetris{
                     }
                 })
             });
+        }else{
+            this.y++;
         }
-        this.y++;
         this.renderGameState();
         console.log(this.grid)
     }
 }
 function ready(){
-    const games=new MyTetris(shapes[0],ctx);
+    const games=new MyTetris(shapes[1],ctx);
     setInterval(()=>{
         ctx.clearRect(0,0,gamesEl.width,gamesEl.height);
         games.moveDown()
