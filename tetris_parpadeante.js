@@ -113,47 +113,42 @@ class MyTetris{
         }
     }
     collision(x,y){
-        for (let i=0;i<this.shape.length;i++){
-            for(let j=0;this.shape.length;j++){
-                if(this.shape[i][j]>0){
-                    if((x+i)>0&&(x+i)<cols&&(y+j)<rows){
-                        if(this.grid[q][p]>0){
-                            return true
-                        }
-                    }else{
-                        return true
+        for(let i=0;i<this.shape.length;i++){
+            for(let j=0;j<this.shape.length;j++){
+                if(x+j>0&&x+j<cols&&y+i<rows){
+                    if(this.grid[y+i][x+j]>0){
+                        return true;
                     }
+                }else{
+                    return true;
                 }
             }
         }
-        return false
-    }
+        return false;
+    };
     moveDown(){
-        if(this.fallingPiece===null){
-            this.renderGameState()
-            return
-        }else if(this.collision(this.x,this.y+1)){
-            this.renderPiece.map((row,i)=>{
+        if(this.collision(this.x,this.y+1)){
+            this.shape.map((row,i)=>{
                 row.map((cell,j)=>{
-                    if((x+j)>=0&&(x+j)<cols&&(y+i)<rows&&cell>0){
-                        this.grid[y+i][x+j]=shape[i][j]
+                    let p=this.x+j;
+                    let q=this.y+i;
+                    if(p>=0&&p<cols&&q<rows&&cell>0){
+                        this.grid[q][p]=this.shape[i][j];
                     }
                 })
             });
-            if(this.y===0){
-                alert('game is over');
-                this.grid=this.makeStarting()
-            }
-        }else{
-            this.y+=1
         }
-        this.renderGameState()
+        this.y++;
+        this.renderGameState();
+        console.log(this.grid)
     }
 }
 function ready(){
     const games=new MyTetris(shapes[0],ctx);
     setInterval(()=>{
-        games.moveDown();
+        ctx.clearRect(0,0,gamesEl.width,gamesEl.height);
+        games.moveDown()
+        games.renderPiece();
     },1000)
 }
 ready();
